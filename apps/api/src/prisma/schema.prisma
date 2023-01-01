@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  provider     UserProvider
+  provider_uid String?
+  name         String
+  username     String?       @unique
+  password     String?
+  lastLoggedIn DateTime?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  Wallet       Wallet[]
+  Category     Category[]
+  Transaction  Transaction[]
+}
+
+model Wallet {
+  id              String        @id @default(uuid())
+  user            User          @relation(fields: [userId], references: [id])
+  userId          String
+  name            String
+  icon            String
+  balance         Float         @default(0)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  TransactionFrom Transaction[] @relation(name: "TransactionFrom")
+  TransactionTo   Transaction[] @relation(name: "TransactionTo")
+}
+
+model Category {
+  id          String        @id @default(uuid())
+  user        User          @relation(fields: [userId], references: [id])
+  userId      String
+  type        CategoryType
+  name        String
+  note        String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id           String       @id @default(uuid())
+  user         User         @relation(fields: [userId], references: [id])
+  userId       String
+  datetime     DateTime
+  type         CategoryType
+  walletFrom   Wallet       @relation(name: "TransactionFrom", fields: [walletFromId], references: [id])
+  walletFromId String
+  walletTo     Wallet?      @relation(name: "TransactionTo", fields: [walletToId], references: [id])
+  walletToId   String?
+  category     Category     @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  amount       Float
+  note         String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+enum UserProvider {
+  LOCAL
+  LINE
+  AZURE_AD
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
