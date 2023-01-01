@@ -1,10 +1,10 @@
 module.exports = {
   root: true,
-  extends: ["airbnb", "airbnb-typescript", "custom"],
+  extends: ['airbnb', 'airbnb-typescript', 'custom'],
   parserOptions: {
-    project: ["./apps/web/tsconfig.json"],
+    project: ['./apps/web/tsconfig.json'],
   },
   rules: {
-    "react/react-in-jsx-scope": "off",
+    'react/react-in-jsx-scope': 'off',
   },
 };
