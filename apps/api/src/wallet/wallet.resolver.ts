@@ -15,14 +15,6 @@ import { WalletService } from './wallet.service';
 export class WalletResolver {
   constructor(private readonly walletService: WalletService) {}
 
-  @Mutation('createWallet')
-  create(
-    @CurrentUser() user: AuthUser,
-    @Args('createWalletInput') createWalletInput: CreateWalletInput,
-  ) {
-    return this.walletService.create(user.id, createWalletInput);
-  }
-
   @Query('wallets')
   findAll(@CurrentUser() user: AuthUser) {
     return this.walletService.findAll(user.id);
@@ -31,6 +23,14 @@ export class WalletResolver {
   @Query('wallet')
   findOne(@CurrentUser() user: AuthUser, @Args('id') id: string) {
     return this.walletService.findOne(user.id, id);
+  }
+
+  @Mutation('createWallet')
+  create(
+    @CurrentUser() user: AuthUser,
+    @Args('createWalletInput') createWalletInput: CreateWalletInput,
+  ) {
+    return this.walletService.create(user.id, createWalletInput);
   }
 
   @Mutation('updateWallet')

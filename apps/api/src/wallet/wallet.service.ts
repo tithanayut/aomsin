@@ -16,6 +16,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class WalletService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  findAll(userId: string) {
+    return this.prismaService.wallet.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  async findOne(userId: string, walletId: string) {
+    return this.findOneAndValidateOwnership(userId, walletId);
+  }
+
   create(userId: string, createWalletInput: CreateWalletInput) {
     const { name, icon, balance } = createWalletInput;
 
@@ -32,18 +44,6 @@ export class WalletService {
         userId,
       },
     });
-  }
-
-  findAll(userId: string) {
-    return this.prismaService.wallet.findMany({
-      where: {
-        userId,
-      },
-    });
-  }
-
-  async findOne(userId: string, walletId: string) {
-    return this.findOneAndValidateOwnership(userId, walletId);
   }
 
   async update(userId: string, updateWalletInput: UpdateWalletInput) {
