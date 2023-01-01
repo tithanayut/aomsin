@@ -1,0 +1,32 @@
+type Wallet {
+  id: String!
+  name: String!
+  icon: String!
+  balance: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  # transactions: [Transaction]!
+}
+
+input CreateWalletInput {
+  name: String!
+  icon: String!
+  balance: Float!
+}
+
+input UpdateWalletInput {
+  id: String!
+  name: String
+  icon: String
+}
+
+type Query {
+  wallets: [Wallet]!
+  wallet(id: String!): Wallet
+}
+
+type Mutation {
+  createWallet(createWalletInput: CreateWalletInput!): Wallet!
+  updateWallet(updateWalletInput: UpdateWalletInput!): Wallet!
+  deleteWallet(id: String!): Wallet!
+}
