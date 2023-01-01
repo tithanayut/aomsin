@@ -10,6 +10,6 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [ConfigModule.forRoot(), PrismaModule, UserModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
