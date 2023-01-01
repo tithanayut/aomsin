@@ -30,6 +30,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: apps/${{ github.event.inputs.app }}
+          context: .
+          file: apps/${{ github.event.inputs.app }}/Dockerfile
           push: true
           tags: tithanayut/aomsin/${{ github.event.inputs.app }}:latest
