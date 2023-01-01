@@ -33,4 +33,4 @@ jobs:
           context: .
           file: apps/${{ github.event.inputs.app }}/Dockerfile
           push: true
-          tags: tithanayut/aomsin/${{ github.event.inputs.app }}:latest
+          tags: ghcr.io/tithanayut/aomsin/${{ github.event.inputs.app }}:latest
