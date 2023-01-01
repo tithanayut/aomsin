@@ -29,6 +29,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -44,3 +45,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Tests
+/coverage
+/.nyc_output
