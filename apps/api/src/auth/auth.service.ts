@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CredentialDto, LoginDto } from 'types';
+import { CredentialDto, JwtPayload, LoginDto } from 'types';
 
 @Injectable()
 export class AuthService {
@@ -42,11 +42,15 @@ export class AuthService {
       data: { lastLoggedIn: new Date() },
     });
 
+    // Form credential
+    const credential: JwtPayload = {
+      sub: user.id,
+      username: user.username,
+      name: user.name,
+    };
+
     // Generate JWT
-    const accessToken = await this.jwtService.signAsync(
-      { name: user.name },
-      { subject: user.id.toString() },
-    );
+    const accessToken = await this.jwtService.signAsync(credential);
 
     return {
       accessToken,
