@@ -1,0 +1,41 @@
+enum CategoryType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+type Category {
+  id: String!
+  type: CategoryType!
+  name: String!
+  icon: String!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  # transactions: [Transaction]!
+}
+
+input CreateCategoryInput {
+  type: CategoryType!
+  name: String!
+  icon: String!
+  note: String
+}
+
+input UpdateCategoryInput {
+  id: String!
+  name: String
+  icon: String
+  note: String
+}
+
+type Query {
+  categories: [Category]!
+  category(id: String!): Category
+}
+
+type Mutation {
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  deleteCategory(id: String!): Category!
+}
