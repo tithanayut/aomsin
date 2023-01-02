@@ -24,7 +24,7 @@ export class WalletService {
     });
   }
 
-  async findOne(userId: string, walletId: string) {
+  findOne(userId: string, walletId: string) {
     return this.findOneAndValidateOwnership(userId, walletId);
   }
 
@@ -61,18 +61,18 @@ export class WalletService {
         id: wallet.id,
       },
       data: {
-        name,
-        icon,
+        name: name ?? undefined,
+        icon: icon ?? undefined,
       },
     });
   }
 
   async remove(userId: string, walletId: string) {
-    await this.findOneAndValidateOwnership(userId, walletId);
+    const wallet = await this.findOneAndValidateOwnership(userId, walletId);
 
     return this.prismaService.wallet.delete({
       where: {
-        id: walletId,
+        id: wallet.id,
       },
     });
   }
