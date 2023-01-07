@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as ldapEscape from 'ldap-escape';
 import * as ldap from 'ldapjs';
 
 @Injectable()
@@ -26,8 +27,7 @@ export class LdapService {
 
   private async search(username: string) {
     const opts = {
-      // TODO: Escape string
-      filter: `uid=${username}`,
+      filter: ldapEscape.filter`uid=${username}`,
       scope: 'sub',
       attributes: ['dn', 'displayName'],
     } satisfies ldap.SearchOptions;
