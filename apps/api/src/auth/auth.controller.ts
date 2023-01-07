@@ -12,4 +12,10 @@ export class AuthController {
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
+
+  @Post('/ldap')
+  @HttpCode(200)
+  ldapLogin(@Body() loginDto: LoginDto) {
+    return this.authService.ldapLogin(loginDto);
+  }
 }

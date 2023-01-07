@@ -4,7 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Prisma, User, UserProvider } from '@prisma/client';
+import { Prisma, UserProvider } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from 'types';
@@ -27,16 +27,21 @@ export class UserService {
     }
 
     // Create user
-    let user: User;
     try {
-      const newUser: Prisma.UserCreateInput = {
-        provider: UserProvider.LOCAL,
-        name,
-        username: username.toLowerCase(),
-        password: await this.hashPassword(password),
-      };
+      const user = await this.prismaService.user.create({
+        data: {
+          provider: UserProvider.LOCAL,
+          name,
+          username: username.toLowerCase(),
+          password: await this.hashPassword(password),
+        },
+      });
 
-      user = await this.prismaService.user.create({ data: newUser });
+      return {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+      };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2002') {
@@ -45,12 +50,29 @@ export class UserService {
       }
       throw new InternalServerErrorException();
     }
+  }
 
-    return {
-      id: user.id,
-      username: user.username,
-      name: user.name,
-    };
+  async createExternalUser(
+    provider: UserProvider,
+    providerUid: string,
+    name: string,
+  ) {
+    try {
+      return await this.prismaService.user.create({
+        data: {
+          provider,
+          provider_uid: providerUid,
+          name,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2002') {
+          throw new ConflictException(`User already exists`);
+        }
+      }
+      throw new InternalServerErrorException();
+    }
   }
 
   private hashPassword(password: string): Promise<string> {
