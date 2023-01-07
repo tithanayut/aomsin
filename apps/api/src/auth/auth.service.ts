@@ -4,7 +4,7 @@ import { User, UserProvider } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
-import { CredentialDto, JwtPayload, LoginDto } from 'types';
+import { CredentialDto, LoginDto } from 'types';
 
 import { LdapService } from './ldap.service';
 
