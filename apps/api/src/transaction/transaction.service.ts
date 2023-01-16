@@ -117,9 +117,26 @@ export class TransactionService {
   //   return `This action updates a #${id} transaction`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} transaction`;
-  // }
+  async remove(userId: string, transactionId: string) {
+    const transaction = await this.findOneAndValidateOwnership(
+      userId,
+      transactionId,
+    );
+
+    // Update wallet balance
+    const wallet = await this.walletService.findOne(
+      userId,
+      transaction.walletFromId,
+    );
+    const newBalance = wallet.balance - transaction.amount;
+    await this.walletService.updateBalance(userId, wallet.id, newBalance);
+
+    return this.prismaService.transaction.delete({
+      where: {
+        id: transaction.id,
+      },
+    });
+  }
 
   private async findOneAndValidateOwnership(
     userId: string,

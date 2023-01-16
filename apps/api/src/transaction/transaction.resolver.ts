@@ -45,8 +45,8 @@ export class TransactionResolver {
   //   );
   // }
 
-  // @Mutation('removeTransaction')
-  // remove(@Args('id') id: number) {
-  //   return this.transactionService.remove(id);
-  // }
+  @Mutation('deleteTransaction')
+  remove(@CurrentUser() user: AuthUser, @Args('id') id: string) {
+    return this.transactionService.remove(user.id, id);
+  }
 }
