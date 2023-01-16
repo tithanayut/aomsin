@@ -37,14 +37,18 @@ export class TransactionService {
     userId: string,
     createTransactionInput: CreateTransactionInput,
   ) {
-    const {
-      datetime = new Date(),
-      type,
-      walletId,
-      categoryId,
-      amount,
-      note,
-    } = createTransactionInput;
+    const { type, walletId, categoryId, amount, note } = createTransactionInput;
+
+    // Parse datetime
+    let datetime = createTransactionInput.datetime;
+    if (!createTransactionInput.datetime) {
+      datetime = new Date();
+    } else {
+      datetime = new Date(createTransactionInput.datetime);
+      if (isNaN(datetime.getTime())) {
+        throw new BadRequestException('`datetime` is invalid');
+      }
+    }
 
     // Validate input
     if (amount < 0) {
