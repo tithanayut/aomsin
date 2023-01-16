@@ -14,6 +14,13 @@ export enum CategoryType {
     TRANSFER = "TRANSFER"
 }
 
+export enum UserProvider {
+    LOCAL = "LOCAL",
+    LDAP = "LDAP",
+    LINE = "LINE",
+    AZURE_AD = "AZURE_AD"
+}
+
 export interface CreateCategoryInput {
     type: CategoryType;
     name: string;
@@ -53,6 +60,7 @@ export interface Category {
 export interface IQuery {
     categories(): Nullable<Category>[] | Promise<Nullable<Category>[]>;
     category(id: string): Nullable<Category> | Promise<Nullable<Category>>;
+    me(): User | Promise<User>;
     wallets(): Nullable<Wallet>[] | Promise<Nullable<Wallet>[]>;
     wallet(id: string): Nullable<Wallet> | Promise<Nullable<Wallet>>;
 }
@@ -64,6 +72,20 @@ export interface IMutation {
     createWallet(createWalletInput: CreateWalletInput): Wallet | Promise<Wallet>;
     updateWallet(updateWalletInput: UpdateWalletInput): Wallet | Promise<Wallet>;
     deleteWallet(id: string): Wallet | Promise<Wallet>;
+}
+
+export interface User {
+    id: string;
+    provider: UserProvider;
+    provider_uid?: Nullable<string>;
+    name: string;
+    username?: Nullable<string>;
+    lastLoggedIn?: Nullable<DateTime>;
+    isActive: boolean;
+    createdAt: DateTime;
+    updatedAt: DateTime;
+    Wallet: Nullable<Wallet>[];
+    Category: Nullable<Category>[];
 }
 
 export interface Wallet {

@@ -7,5 +7,6 @@ import { CategoryService } from './category.service';
 @Module({
   imports: [PrismaModule],
   providers: [CategoryResolver, CategoryService],
+  exports: [CategoryService],
 })
 export class CategoryModule {}

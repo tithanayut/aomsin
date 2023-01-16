@@ -6,12 +6,18 @@ import {
 } from '@nestjs/common';
 import { Prisma, UserProvider } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { CategoryService } from 'src/category/category.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WalletService } from 'src/wallet/wallet.service';
 import { CreateUserDto } from 'types';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly walletService: WalletService,
+    private readonly categoryService: CategoryService,
+  ) {}
 
   async createLocalUser(createUserDto: CreateUserDto) {
     const { name, username, password } = createUserDto;
@@ -73,6 +79,16 @@ export class UserService {
       }
       throw new InternalServerErrorException();
     }
+  }
+
+  findOne(userId: string) {
+    return this.prismaService.user.findUnique({
+      where: { id: userId },
+      include: {
+        Wallet: true,
+        Category: true,
+      },
+    });
   }
 
   private hashPassword(password: string): Promise<string> {

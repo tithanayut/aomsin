@@ -7,5 +7,6 @@ import { WalletService } from './wallet.service';
 @Module({
   imports: [PrismaModule],
   providers: [WalletResolver, WalletService],
+  exports: [WalletService],
 })
 export class WalletModule {}

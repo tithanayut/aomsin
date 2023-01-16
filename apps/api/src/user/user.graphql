@@ -1,0 +1,25 @@
+enum UserProvider {
+  LOCAL
+  LDAP
+  LINE
+  AZURE_AD
+}
+
+type User {
+  id: String!
+  provider: UserProvider!
+  provider_uid: String
+  name: String!
+  username: String
+  lastLoggedIn: DateTime
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  Wallet: [Wallet]!
+  Category: [Category]!
+  # Transaction:  Transaction[]
+}
+
+type Query {
+  me: User!
+}
