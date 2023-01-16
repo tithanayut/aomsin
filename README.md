@@ -1,6 +1,6 @@
-# Turborepo starter
+# aomsin
 
-This is an official pnpm starter turborepo.
+aomsin is a simple money tracker app for demonstration of GraphQL. aomsin project uses turborepo.
 
 ## What's inside?
 
@@ -8,11 +8,12 @@ This turborepo uses [pnpm](https://pnpm.io) as a package manager. It includes th
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+- `api`: a [NestJS](https://nestjs.com/) app for API
+- `web`: a [Vite](https://vitejs.dev/) (React) single page app for frontend
+- `ui`: not currently in use
+- `types`: shared TypeScript types
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-prettier` and `eslint-plugin-simple-import-sort`)
+- `tsconfig`: `tsconfig.json`s used throughout the monorepo (WIP)
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
