@@ -1,12 +1,6 @@
-enum CategoryType {
-  INCOME
-  EXPENSE
-  TRANSFER
-}
-
 type Category {
   id: String!
-  type: CategoryType!
+  type: TransactionType!
   name: String!
   icon: String!
   note: String
@@ -16,7 +10,7 @@ type Category {
 }
 
 input CreateCategoryInput {
-  type: CategoryType!
+  type: TransactionType!
   name: String!
   icon: String!
   note: String

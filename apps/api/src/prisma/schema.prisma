@@ -39,34 +39,34 @@ model Wallet {
 }
 
 model Category {
-  id          String        @id @default(uuid())
-  user        User          @relation(fields: [userId], references: [id])
+  id          String          @id @default(uuid())
+  user        User            @relation(fields: [userId], references: [id])
   userId      String
-  type        CategoryType
+  type        TransactionType
   name        String
   note        String?
   icon        String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
   Transaction Transaction[]
 }
 
 model Transaction {
-  id           String       @id @default(uuid())
-  user         User         @relation(fields: [userId], references: [id])
+  id           String          @id @default(uuid())
+  user         User            @relation(fields: [userId], references: [id])
   userId       String
   datetime     DateTime
-  type         CategoryType
-  walletFrom   Wallet       @relation(name: "TransactionFrom", fields: [walletFromId], references: [id])
+  type         TransactionType
+  walletFrom   Wallet          @relation(name: "TransactionFrom", fields: [walletFromId], references: [id])
   walletFromId String
-  walletTo     Wallet?      @relation(name: "TransactionTo", fields: [walletToId], references: [id])
+  walletTo     Wallet?         @relation(name: "TransactionTo", fields: [walletToId], references: [id])
   walletToId   String?
-  category     Category     @relation(fields: [categoryId], references: [id])
+  category     Category        @relation(fields: [categoryId], references: [id])
   categoryId   String
   amount       Float
   note         String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 }
 
 enum UserProvider {
@@ -76,7 +76,7 @@ enum UserProvider {
   AZURE_AD
 }
 
-enum CategoryType {
+enum TransactionType {
   INCOME
   EXPENSE
   TRANSFER
