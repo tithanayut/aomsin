@@ -1,0 +1,64 @@
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+type Transaction {
+  id: String!
+  datetime: DateTime!
+  type: TransactionType!
+  walletFrom: Wallet!
+  walletTo: Wallet
+  category: Category!
+  amount: Float!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateTransactionInput {
+  datetime: DateTime
+  type: TransactionType!
+  walletId: String!
+  categoryId: String!
+  amount: Float!
+  note: String
+}
+
+input CreateTransferTransactionInput {
+  datetime: DateTime
+  walletFromId: String!
+  walletToId: String!
+  categoryId: String!
+  amount: Float!
+  note: String
+}
+
+input UpdateTransactionInput {
+  id: String!
+  datetime: DateTime
+  walletFromId: String
+  walletToId: String
+  categoryId: String
+  amount: Float
+  note: String
+}
+
+type Query {
+  transactions: [Transaction]!
+  transaction(id: String!): Transaction
+}
+
+type Mutation {
+  createTransaction(
+    createTransactionInput: CreateTransactionInput!
+  ): Transaction!
+  createTransferTransaction(
+    CreateTransferTransactionInput: CreateTransferTransactionInput!
+  ): Transaction!
+  updateTransaction(
+    updateTransactionInput: UpdateTransactionInput!
+  ): Transaction!
+  deleteTransaction(id: String!): Transaction
+}

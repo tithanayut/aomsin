@@ -11,6 +11,7 @@ import { JwtStrategy } from './common/guards/jwt.strategy';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { WalletModule } from './wallet/wallet.module';
     AuthModule,
     WalletModule,
     CategoryModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [JwtStrategy],
