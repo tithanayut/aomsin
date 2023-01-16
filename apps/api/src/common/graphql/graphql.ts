@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export enum CategoryType {
+export enum TransactionType {
     INCOME = "INCOME",
     EXPENSE = "EXPENSE",
     TRANSFER = "TRANSFER"
@@ -22,7 +22,7 @@ export enum UserProvider {
 }
 
 export interface CreateCategoryInput {
-    type: CategoryType;
+    type: TransactionType;
     name: string;
     icon: string;
     note?: Nullable<string>;
@@ -32,6 +32,34 @@ export interface UpdateCategoryInput {
     id: string;
     name?: Nullable<string>;
     icon?: Nullable<string>;
+    note?: Nullable<string>;
+}
+
+export interface CreateTransactionInput {
+    datetime?: Nullable<DateTime>;
+    type: TransactionType;
+    walletId: string;
+    categoryId: string;
+    amount: number;
+    note?: Nullable<string>;
+}
+
+export interface CreateTransferTransactionInput {
+    datetime?: Nullable<DateTime>;
+    walletFromId: string;
+    walletToId: string;
+    categoryId: string;
+    amount: number;
+    note?: Nullable<string>;
+}
+
+export interface UpdateTransactionInput {
+    id: string;
+    datetime?: Nullable<DateTime>;
+    walletFromId?: Nullable<string>;
+    walletToId?: Nullable<string>;
+    categoryId?: Nullable<string>;
+    amount?: Nullable<number>;
     note?: Nullable<string>;
 }
 
@@ -49,7 +77,7 @@ export interface UpdateWalletInput {
 
 export interface Category {
     id: string;
-    type: CategoryType;
+    type: TransactionType;
     name: string;
     icon: string;
     note?: Nullable<string>;
@@ -60,6 +88,8 @@ export interface Category {
 export interface IQuery {
     categories(): Nullable<Category>[] | Promise<Nullable<Category>[]>;
     category(id: string): Nullable<Category> | Promise<Nullable<Category>>;
+    transactions(): Nullable<Transaction>[] | Promise<Nullable<Transaction>[]>;
+    transaction(id: string): Nullable<Transaction> | Promise<Nullable<Transaction>>;
     me(): User | Promise<User>;
     wallets(): Nullable<Wallet>[] | Promise<Nullable<Wallet>[]>;
     wallet(id: string): Nullable<Wallet> | Promise<Nullable<Wallet>>;
@@ -69,9 +99,26 @@ export interface IMutation {
     createCategory(createCategoryInput: CreateCategoryInput): Category | Promise<Category>;
     updateCategory(updateCategoryInput: UpdateCategoryInput): Category | Promise<Category>;
     deleteCategory(id: string): Category | Promise<Category>;
+    createTransaction(createTransactionInput: CreateTransactionInput): Transaction | Promise<Transaction>;
+    createTransferTransaction(CreateTransferTransactionInput: CreateTransferTransactionInput): Transaction | Promise<Transaction>;
+    updateTransaction(updateTransactionInput: UpdateTransactionInput): Transaction | Promise<Transaction>;
+    deleteTransaction(id: string): Nullable<Transaction> | Promise<Nullable<Transaction>>;
     createWallet(createWalletInput: CreateWalletInput): Wallet | Promise<Wallet>;
     updateWallet(updateWalletInput: UpdateWalletInput): Wallet | Promise<Wallet>;
     deleteWallet(id: string): Wallet | Promise<Wallet>;
+}
+
+export interface Transaction {
+    id: string;
+    datetime: DateTime;
+    type: TransactionType;
+    walletFrom: Wallet;
+    walletTo?: Nullable<Wallet>;
+    category: Category;
+    amount: number;
+    note?: Nullable<string>;
+    createdAt: DateTime;
+    updatedAt: DateTime;
 }
 
 export interface User {
