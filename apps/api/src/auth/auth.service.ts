@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User, UserProvider } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
@@ -46,6 +50,10 @@ export class AuthService {
   }
 
   async ldapLogin(loginDto: LoginDto): Promise<any> {
+    if (!this.ldapService.ldapEnabled) {
+      throw new ServiceUnavailableException('LDAP service is not enabled');
+    }
+
     const { username, password } = loginDto;
 
     // Validate input

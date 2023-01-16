@@ -5,9 +5,16 @@ import * as ldap from 'ldapjs';
 
 @Injectable()
 export class LdapService {
+  ldapEnabled: boolean;
   private ldapClient: ldap.Client;
 
   constructor(private readonly configService: ConfigService) {
+    this.ldapEnabled = configService.get('LDAP_ENABLED') === 'true';
+    if (!this.ldapEnabled) {
+      console.info('LDAP service is not enabled');
+      return;
+    }
+
     this.ldapClient = ldap.createClient({
       url: this.configService.get('LDAP_URL'),
       bindDN: this.configService.get('LDAP_ADMIN_DN'),
