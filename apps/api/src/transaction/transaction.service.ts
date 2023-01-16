@@ -66,13 +66,6 @@ export class TransactionService {
       );
     }
 
-    // Check if wallet has enough balance
-    if (type === TransactionType.EXPENSE && wallet.balance < amount) {
-      throw new BadRequestException(
-        `Wallet ${walletId} doesn't have enough balance`,
-      );
-    }
-
     // Deduct amount from wallet balance
     switch (type) {
       case TransactionType.INCOME: {
@@ -148,7 +141,7 @@ export class TransactionService {
       },
     });
 
-    // Check if category exists
+    // Check if transaction exists
     if (!transaction) {
       throw new NotFoundException(`Transaction ${transactionId} not found`);
     }
@@ -156,7 +149,7 @@ export class TransactionService {
     // Validate ownership
     if (transaction.userId !== userId) {
       throw new ForbiddenException(
-        `You don't have access to category ${transactionId}`,
+        `You don't have access to transaction ${transactionId}`,
       );
     }
 
