@@ -77,6 +77,19 @@ export class WalletService {
     });
   }
 
+  async updateBalance(userId: string, walletId: string, newBalance: number) {
+    const wallet = await this.findOneAndValidateOwnership(userId, walletId);
+
+    return this.prismaService.wallet.update({
+      where: {
+        id: wallet.id,
+      },
+      data: {
+        balance: newBalance,
+      },
+    });
+  }
+
   private async findOneAndValidateOwnership(
     userId: string,
     walletId: string,
