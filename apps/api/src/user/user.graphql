@@ -15,8 +15,8 @@ type User {
   isActive: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-  Wallet: [Wallet]!
-  Category: [Category]!
+  wallet: [Wallet]!
+  category: [Category]!
   # Transaction:  Transaction[]
 }
 

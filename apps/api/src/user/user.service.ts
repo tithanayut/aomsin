@@ -79,8 +79,8 @@ export class UserService {
     return this.prismaService.user.findUnique({
       where: { id: userId },
       include: {
-        Wallet: true,
-        Category: true,
+        wallet: true,
+        category: true,
       },
     });
   }
