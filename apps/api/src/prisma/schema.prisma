@@ -18,24 +18,24 @@ model User {
   isActive     Boolean       @default(true)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  Wallet       Wallet[]
-  Category     Category[]
-  Transaction  Transaction[]
+  wallet       Wallet[]
+  category     Category[]
+  transaction  Transaction[]
 
   @@unique([provider, provider_uid])
 }
 
 model Wallet {
-  id              String        @id @default(uuid())
-  user            User          @relation(fields: [userId], references: [id])
-  userId          String
-  name            String
-  icon            String
-  balance         Float         @default(0)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  TransactionFrom Transaction[] @relation(name: "TransactionFrom")
-  TransactionTo   Transaction[] @relation(name: "TransactionTo")
+  id                  String        @id @default(uuid())
+  user                User          @relation(fields: [userId], references: [id])
+  userId              String
+  name                String
+  icon                String
+  balance             Float         @default(0)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  transaction         Transaction[] @relation(name: "Transaction")
+  transferTransaction Transaction[] @relation(name: "TransferTransaction")
 }
 
 model Category {
@@ -48,25 +48,25 @@ model Category {
   icon        String
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
-  Transaction Transaction[]
+  transaction Transaction[]
 }
 
 model Transaction {
-  id           String          @id @default(uuid())
-  user         User            @relation(fields: [userId], references: [id])
-  userId       String
-  datetime     DateTime
-  type         TransactionType
-  walletFrom   Wallet          @relation(name: "TransactionFrom", fields: [walletFromId], references: [id])
-  walletFromId String
-  walletTo     Wallet?         @relation(name: "TransactionTo", fields: [walletToId], references: [id])
-  walletToId   String?
-  category     Category        @relation(fields: [categoryId], references: [id])
-  categoryId   String
-  amount       Float
-  note         String?
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id               String          @id @default(uuid())
+  user             User            @relation(fields: [userId], references: [id])
+  userId           String
+  datetime         DateTime
+  type             TransactionType
+  wallet           Wallet          @relation(name: "Transaction", fields: [walletId], references: [id])
+  walletId         String
+  category         Category        @relation(fields: [categoryId], references: [id])
+  categoryId       String
+  amount           Float
+  note             String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  transferWallet   Wallet?         @relation(name: "TransferTransaction", fields: [transferWalletId], references: [id])
+  transferWalletId String?
 }
 
 enum UserProvider {
