@@ -26,6 +26,11 @@ export class TransactionService {
       where: {
         userId,
       },
+      include: {
+        wallet: true,
+        transferWallet: true,
+        category: true,
+      },
     });
   }
 
@@ -67,15 +72,14 @@ export class TransactionService {
     }
 
     // Deduct amount from wallet balance
+    let newBalance: number;
     switch (type) {
       case TransactionType.INCOME: {
-        const newBalance = wallet.balance + amount;
-        await this.walletService.updateBalance(userId, wallet.id, newBalance);
+        newBalance = wallet.balance + amount;
         break;
       }
       case TransactionType.EXPENSE: {
-        const newBalance = wallet.balance - amount;
-        await this.walletService.updateBalance(userId, wallet.id, newBalance);
+        newBalance = wallet.balance - amount;
         break;
       }
       default:
@@ -83,22 +87,21 @@ export class TransactionService {
           'Only INCOME or EXPENSE `type` is supported',
         );
     }
-
-    const signedAmount = type === TransactionType.INCOME ? amount : -amount;
+    await this.walletService.updateBalance(userId, wallet.id, newBalance);
 
     return this.prismaService.transaction.create({
       data: {
         userId,
         datetime,
         type,
-        walletFromId: wallet.id,
+        walletId: wallet.id,
         categoryId: category.id,
-        amount: signedAmount,
+        amount,
         note,
       },
       include: {
-        walletFrom: true,
-        walletTo: true,
+        wallet: true,
+        transferWallet: true,
         category: true,
       },
     });
@@ -119,7 +122,7 @@ export class TransactionService {
     // Update wallet balance
     const wallet = await this.walletService.findOne(
       userId,
-      transaction.walletFromId,
+      transaction.walletId,
     );
     const newBalance = wallet.balance - transaction.amount;
     await this.walletService.updateBalance(userId, wallet.id, newBalance);
@@ -127,6 +130,11 @@ export class TransactionService {
     return this.prismaService.transaction.delete({
       where: {
         id: transaction.id,
+      },
+      include: {
+        wallet: true,
+        transferWallet: true,
+        category: true,
       },
     });
   }
@@ -138,6 +146,11 @@ export class TransactionService {
     const transaction = await this.prismaService.transaction.findUnique({
       where: {
         id: transactionId,
+      },
+      include: {
+        wallet: true,
+        transferWallet: true,
+        category: true,
       },
     });
 

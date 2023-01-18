@@ -8,11 +8,11 @@ type Transaction {
   id: String!
   datetime: DateTime!
   type: TransactionType!
-  walletFrom: Wallet!
-  walletTo: Wallet
+  wallet: Wallet!
   category: Category!
   amount: Float!
   note: String
+  transferWallet: Wallet
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -28,8 +28,8 @@ input CreateTransactionInput {
 
 input CreateTransferTransactionInput {
   datetime: DateTime
-  walletFromId: String!
-  walletToId: String!
+  fromWalletId: String!
+  toWalletId: String!
   categoryId: String!
   amount: Float!
   note: String
@@ -38,8 +38,8 @@ input CreateTransferTransactionInput {
 input UpdateTransactionInput {
   id: String!
   datetime: DateTime
-  walletFromId: String
-  walletToId: String
+  fromWalletId: String
+  toWalletId: String
   categoryId: String
   amount: Float
   note: String

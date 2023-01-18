@@ -46,8 +46,8 @@ export interface CreateTransactionInput {
 
 export interface CreateTransferTransactionInput {
     datetime?: Nullable<DateTime>;
-    walletFromId: string;
-    walletToId: string;
+    fromWalletId: string;
+    toWalletId: string;
     categoryId: string;
     amount: number;
     note?: Nullable<string>;
@@ -56,8 +56,8 @@ export interface CreateTransferTransactionInput {
 export interface UpdateTransactionInput {
     id: string;
     datetime?: Nullable<DateTime>;
-    walletFromId?: Nullable<string>;
-    walletToId?: Nullable<string>;
+    fromWalletId?: Nullable<string>;
+    toWalletId?: Nullable<string>;
     categoryId?: Nullable<string>;
     amount?: Nullable<number>;
     note?: Nullable<string>;
@@ -112,11 +112,11 @@ export interface Transaction {
     id: string;
     datetime: DateTime;
     type: TransactionType;
-    walletFrom: Wallet;
-    walletTo?: Nullable<Wallet>;
+    wallet: Wallet;
     category: Category;
     amount: number;
     note?: Nullable<string>;
+    transferWallet?: Nullable<Wallet>;
     createdAt: DateTime;
     updatedAt: DateTime;
 }
@@ -131,8 +131,8 @@ export interface User {
     isActive: boolean;
     createdAt: DateTime;
     updatedAt: DateTime;
-    Wallet: Nullable<Wallet>[];
-    Category: Nullable<Category>[];
+    wallet: Nullable<Wallet>[];
+    category: Nullable<Category>[];
 }
 
 export interface Wallet {
