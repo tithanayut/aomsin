@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Category } from '@prisma/client';
 import {
   CreateCategoryInput,
   UpdateCategoryInput,
@@ -72,6 +71,13 @@ export class CategoryService {
   async remove(userId: string, categoryId: string) {
     const category = await this.findOneAndValidateOwnership(userId, categoryId);
 
+    // Check if wallet is referenced by any transactions
+    if (category.transaction.length > 0) {
+      throw new BadRequestException(
+        `Category ${categoryId} has one or more transactions associated`,
+      );
+    }
+
     return this.prismaService.category.delete({
       where: {
         id: category.id,
@@ -82,10 +88,13 @@ export class CategoryService {
   private async findOneAndValidateOwnership(
     userId: string,
     categoryId: string,
-  ): Promise<Category> {
+  ) {
     const category = await this.prismaService.category.findUnique({
       where: {
         id: categoryId,
+      },
+      include: {
+        transaction: true,
       },
     });
 

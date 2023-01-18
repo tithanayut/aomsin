@@ -4,7 +4,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Wallet } from '@prisma/client';
 import {
   CreateWalletInput,
   UpdateWalletInput,
@@ -70,6 +69,16 @@ export class WalletService {
   async remove(userId: string, walletId: string) {
     const wallet = await this.findOneAndValidateOwnership(userId, walletId);
 
+    // Check if wallet is referenced by any transactions
+    if (
+      wallet.transaction.length > 0 ||
+      wallet.transferTransaction.length > 0
+    ) {
+      throw new BadRequestException(
+        `Wallet ${walletId} has one or more transactions or transfer transactions associated`,
+      );
+    }
+
     return this.prismaService.wallet.delete({
       where: {
         id: wallet.id,
@@ -90,13 +99,14 @@ export class WalletService {
     });
   }
 
-  private async findOneAndValidateOwnership(
-    userId: string,
-    walletId: string,
-  ): Promise<Wallet> {
+  private async findOneAndValidateOwnership(userId: string, walletId: string) {
     const wallet = await this.prismaService.wallet.findUnique({
       where: {
         id: walletId,
+      },
+      include: {
+        transaction: true,
+        transferTransaction: true,
       },
     });
 
